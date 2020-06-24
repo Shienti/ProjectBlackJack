@@ -22,38 +22,47 @@ namespace BlackJack
 
                 while (game == true)
                 {
-                    Console.WriteLine($"Your cards: {playerHand.CardsInHand()}\nTotal Value: {playerHand.HandValue()}");
-                    NewLine();
-                    Console.WriteLine($"Dealers cards: {dealerHand.CardsInHand()}\nTotal Value: {dealerHand.HandValue()}");
-                    NewLine();
-                    Menu();
-                    string decision = Console.ReadLine().Trim().ToLower();
-                    NewLine();
-
-                    switch (decision)
+                    bool validInput = false;
+                    while (validInput == false)
                     {
-                        case "h":
-                            playerHand.hand.Add(deck.GetCard());
-                            if (playerHand.BustCheck() == true)
-                            {
-                                Console.WriteLine($"You Busted!\nYour final hand: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}");
+                        Console.WriteLine($"Your cards: {playerHand.CardsInHand()}\nTotal Value: {playerHand.HandValue()}");
+                        NewLine();
+                        Console.WriteLine($"Dealers cards: {dealerHand.CardsInHand()}\nTotal Value: {dealerHand.HandValue()}");
+                        NewLine();
+                        Menu();
+                        string decision = Console.ReadLine().Trim().ToLower();
+                        Console.Clear();
+                        switch (decision)
+                        {
+                            case "h":
+                                validInput = true;
+                                playerHand.hand.Add(deck.GetCard());
+                                Console.WriteLine($"You got: {playerHand.LastCardInHand().Name}");
+                                if (playerHand.BustCheck() == true)
+                                {
+                                    Console.WriteLine($"You Busted!\nYour final hand: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}");
+                                    game = false;
+                                    break;
+                                }
                                 break;
-                            }
-                            break;
-                        case "s":
-                            game = false;
-                            DealerPlay();
-                            if (dealerHand.BustCheck() == true)
-                            {
-                                Console.WriteLine("Dealer Busted!");
+                            case "s":
+                                validInput = true;
+                                game = false;
+                                DealerPlay();
+                                if (dealerHand.BustCheck() == true)
+                                {
+                                    Console.WriteLine("Dealer Busted!");
+                                    break;
+                                }
+                                ResultCheck();
                                 break;
-                            }
-                            ResultCheck();
-                            break;
+                        }
+                        
                     }
                 }
 
                 play = PlayAgain();
+                Console.Clear();
             }
             while (play == true);
         }
@@ -96,6 +105,7 @@ namespace BlackJack
             while (playerHand.HandValue() > dealerHand.HandValue() && dealerHand.HandValue() < 15)
             {
                 dealerHand.hand.Add(deck.GetCard());
+                Console.WriteLine($"Dealer got: {dealerHand.LastCardInHand().Name}");
             }
 
         }
@@ -104,43 +114,47 @@ namespace BlackJack
         {
             if (playerHand.HandValue() > dealerHand.HandValue())
             {
-                Console.WriteLine($"Congratulations! You Won!\nYour final score: {playerHand.HandValue()}\nDealers final score: {dealerHand.HandValue()}");
+                Console.WriteLine($"Congratulations! You Won!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
             }
             else if (playerHand.HandValue() < dealerHand.HandValue())
             {
-                Console.WriteLine($"Unlucky! You Lost!\nYour final score: {playerHand.HandValue()}\nDealers final score: {dealerHand.HandValue()}");
+                Console.WriteLine($"Unlucky! You Lost!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
             }
             else
             {
-                Console.WriteLine($"Draw!\nYour final score: {playerHand.HandValue()}\nDealers final score: {dealerHand.HandValue()}");
+                Console.WriteLine($"Draw!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
             }
         }
 
         private static bool PlayAgain()
         {
             bool again = true;
+            bool validInput = false;
 
-            Console.WriteLine("Would you like to play again? ");
-            Console.WriteLine("[Y]es");
-            Console.WriteLine("[N]o");
-            Console.Write("Decision: ");
-            string decision = Console.ReadLine().Trim().ToLower();
+            while (validInput == false)
+            {
+                Console.WriteLine("Would you like to play again? ");
+                Console.WriteLine("[Y]es");
+                Console.WriteLine("[N]o");
+                Console.Write("Decision: ");
+                string decision = Console.ReadLine().Trim().ToLower();
+                switch (decision)
+                {
+                    case "y":
+                        again = true;
+                        validInput = true;
+                        deck.cards.Clear();
+                        playerHand.hand.Clear();
+                        dealerHand.hand.Clear();
+                        break;
 
-            if (decision == "y")
-            {
-                again = true;
-                deck.cards.Clear();
-                playerHand.hand.Clear();
-                dealerHand.hand.Clear();
-            }
-            else if (decision == "n")
-            {
-                Console.WriteLine("See you next time!");
-                again = false;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid input");
+                    case "n":
+                        Console.WriteLine("See you next time!");
+                        again = false;
+                        validInput = true;
+                        break;
+                }
+                Console.Clear();
             }
 
             return again;

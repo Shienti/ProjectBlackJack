@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace BlackJackLib
 {
@@ -50,6 +51,11 @@ namespace BlackJackLib
             }
 
             return play;
+        }
+        public Card LastCardInHand()
+        {
+            var lastCard = hand.Last();
+            return lastCard;
         }
     }
 }
