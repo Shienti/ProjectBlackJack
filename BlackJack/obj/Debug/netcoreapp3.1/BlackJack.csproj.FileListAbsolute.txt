@@ -1,0 +1,14 @@
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.csprojAssemblyReference.cache
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.AssemblyInfoInputs.cache
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.AssemblyInfo.cs
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.exe
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.deps.json
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.runtimeconfig.json
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.runtimeconfig.dev.json
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.dll
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJack.pdb
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJackLib.dll
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\bin\Debug\netcoreapp3.1\BlackJackLib.pdb
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.csproj.CopyComplete
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.dll
+C:\Users\zuk_m\OneDrive\Pulpit\Studia\wsei\C#projekt\BlackJack\BlackJack\obj\Debug\netcoreapp3.1\BlackJack.pdb
