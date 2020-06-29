@@ -6,20 +6,25 @@ namespace BlackJack
     class Program
     {
         static void NewLine() => Console.WriteLine();
+        public static int balance = 1000;                                                           //Initial player balance
         public static Deck deck = new Deck();                                                       //Creating new deck
         public static Hand playerHand = new Hand();                                                 //Creating players hand
         public static Hand dealerHand = new Hand();                                                 //Creating dealers hand
         static void Main(string[] args)
         {
             Console.WriteLine("*****BLACKJACK*****");
-
-            bool play = true;                                                                       //Entering game loop
+            bool play = true;                                                                       //Preparing game properties
             do
             {
 
                 AddingCardsToDeck();                                                                //Adding cards to deck
                 PlayerStartingHand();                                                               //Adding players starting cards
                 DealerStartingHand();                                                               //Adding dealers starting cards
+
+                Console.WriteLine($"Your cards: {playerHand.CardsInHand()}");
+                Console.WriteLine($"Total Value: {playerHand.HandValue()}");
+                Console.WriteLine($"Your account balance: {balance}$");
+                int betValue = AddingBet();                                                         //Accepting players bet
 
                 bool game = true;                                                                   //Main game logic loop       
                 while (game == true)
@@ -34,12 +39,14 @@ namespace BlackJack
                         Console.WriteLine($"Dealers cards: {dealerHand.CardsInHand()}");            //Presenting cards in dealers hand
                         Console.WriteLine($"Total Value: {dealerHand.HandValue()}");                //Presenting dealers hand value
                         NewLine();
+                        Console.WriteLine($"Your bet: {betValue}$");                                //Players current bet
+                        Console.WriteLine($"Your account balance: {balance-betValue}$");            //Players current balance
 
                         Menu();                                                                     //Print game Menu with possible choices
                         string decision = Console.ReadLine().Trim().ToLower();                      //getting user input
                         Console.Clear();
 
-                        switch (decision)                                                           //Action taken, depending on users choice
+                        switch (decision)                                                           //Makes action, depending on users choice
                         {
 
                             //Hit
@@ -49,8 +56,9 @@ namespace BlackJack
                                 Console.WriteLine($"You got: {playerHand.LastCardInHand().Name}");  //Presenting players new card
                                 if (playerHand.BustCheck() == true)                                 //Checking for Bust
                                 {
-                                    Console.WriteLine($"You Busted!");
+                                    Console.WriteLine($"You Busted!\nYou lost {betValue}$");
                                     PrintResults();
+                                    balance -= betValue;
                                     game = false;
                                     break;
                                 }
@@ -63,11 +71,12 @@ namespace BlackJack
                                 DealerPlay();                                                       //Simulating Dealers "logic"
                                 if (dealerHand.BustCheck() == true)                                 //Checking for dealers Bust
                                 {
-                                    Console.WriteLine("Dealer Busted!");
+                                    Console.WriteLine($"Dealer Busted!\nYou won {2*betValue}$");
+                                    balance += 2 * betValue;
                                     PrintResults();
                                     break;
                                 }
-                                ResultCheck();                                                      //Checking game result and comparing hands
+                                ResultCheck(betValue);                                              //Checking game result and comparing hands
                                 break;
                         }
                         
@@ -80,17 +89,17 @@ namespace BlackJack
             while (play == true);
         }
 
-        private static void PlayerStartingHand()
+        private static void PlayerStartingHand()                                                    //Basic starting hand method
         {
             playerHand.hand.Add(deck.GetCard());
             playerHand.hand.Add(deck.GetCard());
         }
-        private static void DealerStartingHand()
+        private static void DealerStartingHand()                                                    //Basic starting hand method
         {
             dealerHand.hand.Add(deck.GetCard());
             dealerHand.hand.Add(deck.GetCard());
         }
-        private static void AddingCardsToDeck()
+        private static void AddingCardsToDeck()                                                     //Adding cards to deck
         {
             deck.AddNewCard("2", 2);
             deck.AddNewCard("3", 3);
@@ -106,14 +115,14 @@ namespace BlackJack
             deck.AddNewCard("King", 10);
             deck.AddNewCard("Ace", 1);
         }
-        private static void Menu()
+        private static void Menu()                                                                  //Menu display
         {
             Console.WriteLine("What's your decision?");
             Console.WriteLine("[H]it!");
             Console.WriteLine("[S]tay!");
             Console.Write("Decision: ");
         }
-        private static void DealerPlay()
+        private static void DealerPlay()                                                            //Dealers "logic"
         {
             while (playerHand.HandValue() > dealerHand.HandValue() && dealerHand.HandValue() < 15)
             {
@@ -123,65 +132,112 @@ namespace BlackJack
 
         }
 
-        private static void ResultCheck()
+        private static void ResultCheck(int bet)                                                    //Checking results after player and dealer finish their turns
         {
             if (playerHand.HandValue() > dealerHand.HandValue())
             {
-                Console.WriteLine($"Congratulations! You Won!");
+                Console.WriteLine($"Congratulations! You Won {2*bet}$!");
+                balance += 2 * bet;
                 PrintResults();
             }
             else if (playerHand.HandValue() < dealerHand.HandValue())
             {
-                Console.WriteLine($"Unlucky! You Lost!");
+                Console.WriteLine($"Unlucky! You Lost {bet}$!");
+                balance -= bet;
                 PrintResults();
             }
             else
             {
-                Console.WriteLine($"Draw!");
+                Console.WriteLine($"Draw! Bet returned to your account!");
                 PrintResults();
             }
         }
 
-        private static bool PlayAgain()
+        private static bool PlayAgain()                                                             //Setting up for new game
         {
             bool again = true;
             bool validInput = false;
 
-            while (validInput == false)
+            if (balance <= 0)
             {
-                Console.WriteLine("Would you like to play again? ");
-                Console.WriteLine("[Y]es");
-                Console.WriteLine("[N]o");
-                Console.Write("Decision: ");
-                string decision = Console.ReadLine().Trim().ToLower();
-                switch (decision)
+                Console.WriteLine("You lost all your money. Gambling is BAD!");
+                Console.ReadLine();
+                again = false;
+            }
+            else
+            {
+                while (validInput == false)
                 {
-                    case "y":
-                        again = true;
-                        validInput = true;
-                        deck.cards.Clear();
-                        playerHand.hand.Clear();
-                        dealerHand.hand.Clear();
-                        break;
+                    Console.WriteLine("Would you like to play again? ");
+                    Console.WriteLine("[Y]es");
+                    Console.WriteLine("[N]o");
+                    Console.Write("Decision: ");
+                    string decision = Console.ReadLine().Trim().ToLower();
+                    switch (decision)
+                    {
+                        case "y":
+                            again = true;
+                            validInput = true;
+                            deck.cards.Clear();
+                            playerHand.hand.Clear();
+                            dealerHand.hand.Clear();
+                            break;
 
-                    case "n":
-                        Console.WriteLine("See you next time!");
-                        again = false;
-                        validInput = true;
-                        break;
+                        case "n":
+                            Console.WriteLine("See you next time!");
+                            Console.ReadLine();
+                            again = false;
+                            validInput = true;
+                            break;
+                    }
+                    Console.Clear();
                 }
-                Console.Clear();
             }
 
             return again;
         }
 
-        private static void PrintResults()
+        private static void PrintResults()                                                          //Printing results
         {
             Console.WriteLine("*********************************************");
-            Console.WriteLine($"Your final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}");
+            Console.WriteLine($"Your final cards: {playerHand.CardsInHand()}");
+            Console.WriteLine($"Your final score: {playerHand.HandValue()}");
             Console.WriteLine("*********************************************");
-            Console.WriteLine($"Dealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
+            Console.WriteLine($"Dealers final cards: {dealerHand.CardsInHand()}");
+            Console.WriteLine($"Dealers final score: {dealerHand.HandValue()}");
+        }
+
+        private static int AddingBet()                                                              //Accepting bet
+        {
+            int result;
+            Console.WriteLine("How much would You like to bet?");
+            do
+            {
+                Console.Write("Bet: ");
+                while (!int.TryParse(Console.ReadLine(), out result))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid value");
+                    Console.WriteLine($"Your balance: {balance}$");
+                    Console.Write("Bet: ");
+                }
+                if (result>balance)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Not enough money!");
+                    Console.WriteLine($"Your balance: {balance}$");
+                }
+                else if (result<0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Can't bet with negative numbers!");
+                    Console.WriteLine($"Your balance: {balance}$");
+                }
+            } while (result > balance || result<0);
+            Console.Clear();
+
+            return result;
+
         }
     }
 }
