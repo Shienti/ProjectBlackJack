@@ -22,7 +22,7 @@ namespace BlackJackLib
 
         public Card GetCard()
         {
-            int x = index.Next(0, 12);
+            int x = index.Next(0, 13);
             Card result = cards[x];
             return result;
         }

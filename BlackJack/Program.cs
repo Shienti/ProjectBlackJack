@@ -6,62 +6,75 @@ namespace BlackJack
     class Program
     {
         static void NewLine() => Console.WriteLine();
-        public static Deck deck = new Deck();
-        public static Hand playerHand = new Hand();
-        public static Hand dealerHand = new Hand();
+        public static Deck deck = new Deck();                                                       //Creating new deck
+        public static Hand playerHand = new Hand();                                                 //Creating players hand
+        public static Hand dealerHand = new Hand();                                                 //Creating dealers hand
         static void Main(string[] args)
         {
             Console.WriteLine("*****BLACKJACK*****");
-            bool play = true;
+
+            bool play = true;                                                                       //Entering game loop
             do
             {
-                AddingCardsToDeck();
-                PlayerStartingHand();
-                DealerStartingHand();
-                bool game = true;
 
+                AddingCardsToDeck();                                                                //Adding cards to deck
+                PlayerStartingHand();                                                               //Adding players starting cards
+                DealerStartingHand();                                                               //Adding dealers starting cards
+
+                bool game = true;                                                                   //Main game logic loop       
                 while (game == true)
                 {
                     bool validInput = false;
-                    while (validInput == false)
+                    while (validInput == false)                                                     //Checking if user input is valid. If user unput is invalid, the loop will continue until it's valid
                     {
-                        Console.WriteLine($"Your cards: {playerHand.CardsInHand()}\nTotal Value: {playerHand.HandValue()}");
+
+                        Console.WriteLine($"Your cards: {playerHand.CardsInHand()}");               //Presenting cards in players hand
+                        Console.WriteLine($"Total Value: {playerHand.HandValue()}");                //Presenting players hand value
                         NewLine();
-                        Console.WriteLine($"Dealers cards: {dealerHand.CardsInHand()}\nTotal Value: {dealerHand.HandValue()}");
+                        Console.WriteLine($"Dealers cards: {dealerHand.CardsInHand()}");            //Presenting cards in dealers hand
+                        Console.WriteLine($"Total Value: {dealerHand.HandValue()}");                //Presenting dealers hand value
                         NewLine();
-                        Menu();
-                        string decision = Console.ReadLine().Trim().ToLower();
+
+                        Menu();                                                                     //Print game Menu with possible choices
+                        string decision = Console.ReadLine().Trim().ToLower();                      //getting user input
                         Console.Clear();
-                        switch (decision)
+
+                        switch (decision)                                                           //Action taken, depending on users choice
                         {
+
+                            //Hit
                             case "h":
                                 validInput = true;
-                                playerHand.hand.Add(deck.GetCard());
-                                Console.WriteLine($"You got: {playerHand.LastCardInHand().Name}");
-                                if (playerHand.BustCheck() == true)
+                                playerHand.hand.Add(deck.GetCard());                                //Adding card to players deck
+                                Console.WriteLine($"You got: {playerHand.LastCardInHand().Name}");  //Presenting players new card
+                                if (playerHand.BustCheck() == true)                                 //Checking for Bust
                                 {
-                                    Console.WriteLine($"You Busted!\nYour final hand: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}");
+                                    Console.WriteLine($"You Busted!");
+                                    PrintResults();
                                     game = false;
                                     break;
                                 }
                                 break;
+
+                            //Stay
                             case "s":
                                 validInput = true;
-                                game = false;
-                                DealerPlay();
-                                if (dealerHand.BustCheck() == true)
+                                game = false;                                                       //Stoping game logic loop, because game ends after player decides to stay with his hand
+                                DealerPlay();                                                       //Simulating Dealers "logic"
+                                if (dealerHand.BustCheck() == true)                                 //Checking for dealers Bust
                                 {
                                     Console.WriteLine("Dealer Busted!");
+                                    PrintResults();
                                     break;
                                 }
-                                ResultCheck();
+                                ResultCheck();                                                      //Checking game result and comparing hands
                                 break;
                         }
                         
                     }
                 }
 
-                play = PlayAgain();
+                play = PlayAgain();                                                                 //Asking user for next deal
                 Console.Clear();
             }
             while (play == true);
@@ -91,7 +104,7 @@ namespace BlackJack
             deck.AddNewCard("Jack", 10);
             deck.AddNewCard("Queen", 10);
             deck.AddNewCard("King", 10);
-            deck.AddNewCard("Ace", 11);
+            deck.AddNewCard("Ace", 1);
         }
         private static void Menu()
         {
@@ -114,15 +127,18 @@ namespace BlackJack
         {
             if (playerHand.HandValue() > dealerHand.HandValue())
             {
-                Console.WriteLine($"Congratulations! You Won!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
+                Console.WriteLine($"Congratulations! You Won!");
+                PrintResults();
             }
             else if (playerHand.HandValue() < dealerHand.HandValue())
             {
-                Console.WriteLine($"Unlucky! You Lost!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
+                Console.WriteLine($"Unlucky! You Lost!");
+                PrintResults();
             }
             else
             {
-                Console.WriteLine($"Draw!\n\nYour final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}\n\nDealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
+                Console.WriteLine($"Draw!");
+                PrintResults();
             }
         }
 
@@ -158,6 +174,14 @@ namespace BlackJack
             }
 
             return again;
+        }
+
+        private static void PrintResults()
+        {
+            Console.WriteLine("*********************************************");
+            Console.WriteLine($"Your final cards: {playerHand.CardsInHand()}\nYour final score: {playerHand.HandValue()}");
+            Console.WriteLine("*********************************************");
+            Console.WriteLine($"Dealers final cards: {dealerHand.CardsInHand()}\nDealers final score: {dealerHand.HandValue()}\n");
         }
     }
 }
