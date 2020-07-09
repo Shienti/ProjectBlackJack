@@ -227,13 +227,19 @@ namespace BlackJack
                     Console.WriteLine("Not enough money!");
                     Console.WriteLine($"Your balance: {balance}$");
                 }
+                else if (result == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Can't bet 0$!");
+                    Console.WriteLine($"Your balance: {balance}$");
+                }
                 else if (result<0)
                 {
                     Console.Clear();
                     Console.WriteLine("Can't bet with negative numbers!");
                     Console.WriteLine($"Your balance: {balance}$");
                 }
-            } while (result > balance || result<0);
+            } while (result > balance || result<=0);
             Console.Clear();
 
             return result;
